@@ -8,6 +8,14 @@ import { trackEventTool } from './tools/trackEvent.js';
 
 export { verifierRegistry } from './verifierRegistry.js';
 
+// Re-export the 5 tools so other workspace packages (Next.js dashboard / Mastra agents)
+// can attach them to an in-process agent without a real MCP transport.
+export { getLessonContextTool } from './tools/getLessonContext.js';
+export { generateExerciseTool } from './tools/generateExercise.js';
+export { evaluateAnswerTool } from './tools/evaluateAnswer.js';
+export { getHintTool } from './tools/getHint.js';
+export { trackEventTool } from './tools/trackEvent.js';
+
 /**
  * Builds the ClassOS MCP server. Transports (stdio, http, openai-adapter)
  * import this and call `.startStdio()`, `.startHTTP()`, etc.
