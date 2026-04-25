@@ -19,6 +19,7 @@
   "dependencies": {
     "@mastra/core": "^1.28.0",
     "@mastra/libsql": "^1.9.0",
+    "@mastra/mcp": "^1.5.2",
     "@mastra/memory": "^1.17.1",
     "@openrouter/ai-sdk-provider": "^2.8.0",
     "zod": "^4.3.6"
