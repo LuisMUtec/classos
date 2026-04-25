@@ -25,8 +25,10 @@
  */
 
 import { buildServer } from '../server.js';
+import { registerDefaultVerifiers } from '../verifiers/index.js';
 
 async function main(): Promise<void> {
+  registerDefaultVerifiers();
   const server = buildServer();
   await server.startStdio();
 }

@@ -20,11 +20,13 @@ import { randomUUID } from 'node:crypto';
 
 import { buildServer } from '../server.js';
 import { resolveTokenToCourseId, bindSession } from '../auth.js';
+import { registerDefaultVerifiers } from '../verifiers/index.js';
 
 const PORT = Number(process.env.PORT ?? 4222);
 const HTTP_PATH = '/mcp';
 
 async function main(): Promise<void> {
+  registerDefaultVerifiers();
   const mcp = buildServer();
 
   const httpServer = http.createServer(async (req, res) => {

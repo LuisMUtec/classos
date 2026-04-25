@@ -13,6 +13,10 @@
 
 FROM node:22-alpine
 
+# python_tests verifier shells out to pytest. py3-pytest pulls python3 + the
+# stdlib it needs; nothing else from PyPI required for this verifier.
+RUN apk add --no-cache python3 py3-pytest
+
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
