@@ -9,6 +9,7 @@
   },
   "scripts": {
     "dev": "tsx watch src/transports/stdio.ts",
+    "start": "tsx src/transports/http.ts",
     "start:stdio": "tsx src/transports/stdio.ts",
     "start:http": "tsx src/transports/http.ts",
     "typecheck": "tsc --noEmit"
