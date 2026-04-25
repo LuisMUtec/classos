@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "classos": {
+      "type": "http",
+      "url": "https://edhack-mcp-production.up.railway.app/mcp"
+    }
+  }
+}

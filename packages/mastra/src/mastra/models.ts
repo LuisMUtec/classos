@@ -15,6 +15,8 @@ export const fastModel = flashModel;
 export const reasoningModel = proModel;
 
 // Tokens de salida máxima para cada llamada al modelo.
-// 400 cabe en el budget del key gratuito. Súbelo a 1200+ cuando tengas créditos
-// (los pasos del exerciseGenerator funcionan mejor con ~1200).
-export const MAX_OUTPUT_TOKENS = 400;
+// El budget del free tier de OpenRouter cae con cada llamada (estaba en ~290
+// al momento de escribir). Mantenemos 200 para sobrevivir un rato más en gratis.
+// Súbelo a 1200+ apenas tengas créditos pagos (los pasos del exerciseGenerator
+// funcionan mejor con ~1200).
+export const MAX_OUTPUT_TOKENS = 200;

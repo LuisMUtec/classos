@@ -6,8 +6,12 @@ import {
   WorkflowIcon,
   ArchiveIcon,
   PlayIcon,
+  GraduationCapIcon,
+  BookOpenIcon,
   type LucideIcon,
 } from "lucide-react";
+
+import type { Role } from "@/components/dashboard/RoleProvider";
 
 export interface NavItem {
   label: string;
@@ -23,70 +27,98 @@ export interface NavSection {
   items: NavItem[];
 }
 
-export const NAV_SECTIONS: NavSection[] = [
+const TEACHER_SECTIONS: NavSection[] = [
   {
     items: [
       {
-        label: "Overview",
+        label: "Inicio",
         href: "/overview",
         icon: HouseIcon,
-        description: "Resumen del proyecto",
+        description: "Resumen del workspace docente",
       },
     ],
   },
   {
-    label: "Inteligencia",
+    label: "Mi clase",
     items: [
       {
-        label: "Chat",
+        label: "Mis cursos",
+        href: "/courses",
+        icon: BookOpenIcon,
+        description: "Cursos creados — lecciones y ejercicios",
+      },
+      {
+        label: "Crear con IA",
         href: "/chat",
         icon: MessageSquareIcon,
-        description: "Conversa con un agente IA",
-      },
-      {
-        label: "Agents",
-        href: "/agents",
-        icon: BotIcon,
-        description: "Agents y workflows Mastra",
-      },
-      {
-        label: "Studio",
-        href: "http://localhost:4111",
-        icon: WorkflowIcon,
-        description: "Mastra Studio",
-        external: true,
-      },
-    ],
-  },
-  {
-    label: "Trabajo",
-    items: [
-      {
-        label: "Pipelines",
-        href: "/pipelines",
-        icon: PlayIcon,
-        description: "Multi-agent workflows",
-      },
-      {
-        label: "Library",
-        href: "/library",
-        icon: ArchiveIcon,
-        description: "Runs guardados",
-      },
-    ],
-  },
-  {
-    label: "Sistema",
-    items: [
-      {
-        label: "Settings",
-        href: "/settings",
-        icon: Settings2Icon,
-        description: "Tema, providers, env",
+        description: "Autoría conversacional",
       },
     ],
   },
 ];
 
-// Flat helper for breadcrumbs / page header lookups.
-export const NAV_ITEMS: NavItem[] = NAV_SECTIONS.flatMap((s) => s.items);
+const STUDENT_SECTIONS: NavSection[] = [
+  {
+    label: "Aprender",
+    items: [
+      {
+        label: "Tutor IA",
+        href: "/student",
+        icon: GraduationCapIcon,
+        description: "Chat con el tutor — usa el material del docente vía MCP",
+      },
+    ],
+  },
+];
+
+const ADVANCED_SECTION: NavSection = {
+  label: "Avanzado",
+  items: [
+    {
+      label: "Pipelines",
+      href: "/pipelines",
+      icon: PlayIcon,
+      description: "Workflows multi-agent",
+    },
+    {
+      label: "Library",
+      href: "/library",
+      icon: ArchiveIcon,
+      description: "Runs guardados",
+    },
+    {
+      label: "Agents",
+      href: "/agents",
+      icon: BotIcon,
+      description: "Inspeccionar agents Mastra",
+    },
+    {
+      label: "Mastra Studio",
+      href: "http://localhost:4111",
+      icon: WorkflowIcon,
+      description: "Replay + tracing",
+      external: true,
+    },
+    {
+      label: "Settings",
+      href: "/settings",
+      icon: Settings2Icon,
+      description: "Tema, providers, env",
+    },
+  ],
+};
+
+export function getNavForRole(role: Role): NavSection[] {
+  return role === "teacher" ? TEACHER_SECTIONS : STUDENT_SECTIONS;
+}
+
+export function getAdvancedSection(): NavSection {
+  return ADVANCED_SECTION;
+}
+
+// Flat helper for breadcrumbs / page header lookups across both roles + advanced.
+export const NAV_ITEMS: NavItem[] = [
+  ...TEACHER_SECTIONS.flatMap((s) => s.items),
+  ...STUDENT_SECTIONS.flatMap((s) => s.items),
+  ...ADVANCED_SECTION.items,
+];

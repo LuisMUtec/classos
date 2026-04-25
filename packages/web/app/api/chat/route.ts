@@ -41,16 +41,37 @@ export async function POST(req: Request) {
   const body = (await req.json().catch(() => ({}))) as {
     messages?: UIMessage[];
     agentId?: string;
+    sessionContext?: Record<string, string>;
   };
 
   const agentId = body.agentId ?? "assistant";
   const incoming = body.messages ?? [];
 
   // Convert UIMessages → plain { role, content } that Mastra understands.
-  const mastraMessages = incoming
+  const baseMessages = incoming
     .filter((m) => m.role === "user" || m.role === "assistant" || m.role === "system")
     .map((m) => ({ role: m.role, content: uiMessageToText(m) }))
     .filter((m) => m.content.length > 0);
+
+  // Inject session context (e.g. course_id + student_id for the tutor agent)
+  // as a system message at the head of the conversation, so the agent can pass
+  // those exact ids into tool calls without the user having to repeat them.
+  const ctx = body.sessionContext;
+  const systemPrefix =
+    ctx && Object.keys(ctx).length > 0
+      ? [
+          {
+            role: "system" as const,
+            content:
+              "Contexto de la sesión (úsalos como argumentos en las tools cuando aplique):\n" +
+              Object.entries(ctx)
+                .map(([k, v]) => `${k}=${v}`)
+                .join("  "),
+          },
+        ]
+      : [];
+
+  const mastraMessages = [...systemPrefix, ...baseMessages];
 
   const stream = createUIMessageStream({
     execute: async ({ writer }) => {

@@ -12,7 +12,11 @@
     "typecheck": "pnpm -C packages/mastra exec tsc --noEmit && pnpm -C packages/web exec tsc --noEmit",
     "generate": "pnpm -C packages/mastra generate",
     "demo:reject": "pnpm -C packages/mastra demo:reject",
-    "test:sandbox": "pnpm -C packages/mastra test:sandbox"
+    "test:sandbox": "pnpm -C packages/mastra test:sandbox",
+    "e2e": "pnpm -C packages/web e2e",
+    "e2e:docente": "pnpm -C packages/web e2e -- --grep docente",
+    "e2e:estudiante": "pnpm -C packages/web e2e -- --grep estudiante",
+    "e2e:integracion": "pnpm -C packages/web e2e -- --grep integraci"
   },
   "devDependencies": {
     "concurrently": "^9.0.0"
