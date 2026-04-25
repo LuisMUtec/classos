@@ -1,6 +1,7 @@
 import { createTool } from '@mastra/core/tools';
 import { McpTools, GenerateExerciseOutput } from '@edhack/contracts';
 import { supabase } from '../supabase.js';
+import { requireCourseContext } from '../auth.js';
 
 const def = McpTools.generate_exercise;
 
@@ -17,12 +18,16 @@ export const generateExerciseTool = createTool({
   description: def.description,
   inputSchema: def.input,
   outputSchema: def.output,
-  execute: async ({ topic, difficulty, lesson_id }) => {
+  execute: async ({ topic, difficulty, lesson_id }, context) => {
+    const courseId = requireCourseContext(context);
+
+    // Inner join on lessons forces the exercise's lesson to belong to this course.
     let query = supabase()
       .from('exercises')
-      .select('id, statement_md, verification_kind, difficulty')
+      .select('id, statement_md, verification_kind, difficulty, lessons!inner(course_id)')
       .eq('topic', topic)
       .eq('difficulty', difficulty)
+      .eq('lessons.course_id', courseId)
       .limit(1);
 
     if (lesson_id) query = query.eq('lesson_id', lesson_id);
