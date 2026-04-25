@@ -1,0 +1,32 @@
+{
+  "name": "@edhack/mastra",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "dev": "mastra dev",
+    "build": "mastra build",
+    "start": "mastra start",
+    "typecheck": "tsc --noEmit",
+    "generate": "tsx src/scripts/generate.ts",
+    "demo:reject": "tsx src/scripts/demoReject.ts",
+    "test:sandbox": "tsx src/scripts/testSandbox.ts",
+    "test:loop": "tsx src/scripts/testLoop.ts"
+  },
+  "dependencies": {
+    "@mastra/core": "^1.28.0",
+    "@mastra/libsql": "^1.9.0",
+    "@mastra/memory": "^1.17.1",
+    "@openrouter/ai-sdk-provider": "^2.8.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "mastra": "^1.6.3",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
+  }
+}

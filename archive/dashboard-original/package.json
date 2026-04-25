@@ -1,0 +1,17 @@
+{
+  "name": "dashboard",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "dev": "concurrently --names mastra,web --prefix-colors magenta,cyan \"pnpm -C mastra dev\" \"pnpm -C web dev\"",
+    "dev:mastra": "pnpm -C mastra dev",
+    "dev:web": "pnpm -C web dev",
+    "build": "pnpm -C mastra build && pnpm -C web build",
+    "lint": "pnpm -C web lint",
+    "typecheck": "pnpm -C mastra exec tsc --noEmit && pnpm -C web exec tsc --noEmit"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}

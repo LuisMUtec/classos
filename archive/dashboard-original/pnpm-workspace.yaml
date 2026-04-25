@@ -1,0 +1,7 @@
+packages:
+  - mastra
+  - web
+
+ignoredBuiltDependencies:
+  - sharp
+  - unrs-resolver

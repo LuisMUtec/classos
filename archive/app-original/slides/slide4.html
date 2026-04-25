@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+html { background: #FAFAFA; }
+body {
+  width: 720pt; height: 405pt; margin: 0; padding: 0;
+  background: #FAFAFA;
+  font-family: Helvetica, Arial, sans-serif;
+  color: #0F172A;
+  display: flex;
+  flex-direction: column;
+}
+.header {
+  margin: 32pt 50pt 0 50pt;
+  padding-bottom: 12pt;
+  border-bottom: 4pt solid #DC2626;
+  width: 600pt;
+}
+.header h1 { margin: 0; font-size: 26pt; font-weight: 800; color: #0F172A; }
+.body {
+  margin: 24pt 50pt 0 50pt;
+  flex: 1;
+}
+.body ul { margin: 0; padding-left: 22pt; }
+.body li {
+  font-size: 14pt;
+  line-height: 1.45;
+  color: #1E293B;
+  margin-bottom: 12pt;
+}
+.body li b { color: #0F172A; font-weight: 700; }
+.body li .red { color: #DC2626; font-weight: 700; }
+.body li code {
+  font-family: 'Courier New', monospace;
+  background: #F1F5F9;
+  padding: 1pt 4pt;
+  border-radius: 3pt;
+  font-size: 12pt;
+  color: #0F172A;
+}
+.footer {
+  margin: 0 50pt 22pt 50pt;
+  padding: 10pt 14pt;
+  background: #FEF2F2;
+  border-left: 4pt solid #DC2626;
+  font-size: 11pt;
+  color: #7F1D1D;
+}
+.footer p { margin: 0; line-height: 1.4; }
+</style>
+</head>
+<body>
+<div class="header"><h1>Verificación por ejecución, no LLM-on-LLM</h1></div>
+<div class="body">
+  <ul>
+    <li>El Solver-Validator emite código Python. <b>El workflow lo ejecuta REAL</b> en sandbox aislado.</li>
+    <li>Si los tests no pasan O el spec es ambiguo &rarr; el loop <code>dountil</code> reinvoca al Designer con feedback <span class="red">accionable</span> (&ldquo;ejemplo 2 viola constraint n&gt;=1&rdquo;).</li>
+    <li><b>Ground truth</b>, no juicio de un LLM sobre otro LLM. Un assert que falla es objetivo.</li>
+    <li>Cada agente tiene <b>una sola responsabilidad</b>: Researcher sabe del mundo, Designer sabe pedagogía, Solver sabe Python, Reviewer sabe evaluar.</li>
+  </ul>
+</div>
+<div class="footer"><p><b>Replit Teams for Education cerró en 2024</b> &ldquo;por la economía del sector edu&rdquo;. Ese es exactamente el nicho que atacamos &mdash; y por eso esto debe ser feature, no startup. Ver siguiente slide.</p></div>
+</body>
+</html>

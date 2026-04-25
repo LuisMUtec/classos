@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+html { background: #FAFAFA; }
+body {
+  width: 720pt; height: 405pt; margin: 0; padding: 0;
+  background: #FAFAFA;
+  font-family: Helvetica, Arial, sans-serif;
+  color: #0F172A;
+  display: flex;
+  flex-direction: column;
+}
+.header {
+  margin: 32pt 50pt 0 50pt;
+  padding-bottom: 12pt;
+  border-bottom: 4pt solid #DC2626;
+  width: 200pt;
+}
+.header h1 { margin: 0; font-size: 28pt; font-weight: 800; color: #0F172A; }
+.body {
+  margin: 28pt 50pt 0 50pt;
+  flex: 1;
+}
+.body ul { margin: 0; padding-left: 22pt; }
+.body li {
+  font-size: 15pt;
+  line-height: 1.45;
+  color: #1E293B;
+  margin-bottom: 14pt;
+}
+.body li b { color: #0F172A; font-weight: 700; }
+.body li .red { color: #DC2626; font-weight: 700; }
+.footer {
+  margin: 0 50pt 26pt 50pt;
+  padding: 14pt 18pt;
+  background: #0F172A;
+  border-radius: 6pt;
+  font-family: 'Courier New', monospace;
+  font-size: 12pt;
+  color: #E2E8F0;
+  line-height: 1.45;
+}
+.footer p { margin: 0; }
+.footer .green { color: #10B981; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="header"><h1>Si esto sigue</h1></div>
+<div class="body">
+  <ul>
+    <li><b>Validación con 5&ndash;10 profes CS LatAm</b> reales en las próximas 2 semanas: entrevistas estructuradas, no surveys.</li>
+    <li><b>UI web</b> sobre Mastra dev playground para que el profe use sin CLI.</li>
+    <li><b>Soporte multi-lenguaje</b>: JavaScript primero, luego Java (cubre el 80% de currículos LatAm).</li>
+    <li><b>Banco compartido</b> de ejercicios validados &mdash; el primer network effect del nicho.</li>
+  </ul>
+</div>
+<div class="footer">
+  <p><span class="green">// construido en 1 noche</span></p>
+  <p>Mastra + OpenRouter + Gemini 2.5 Flash &mdash; loop C&rarr;B funciona, sandbox funciona, .md sale en &lt;30s.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+html { background: #FAFAFA; }
+body {
+  width: 720pt; height: 405pt; margin: 0; padding: 0;
+  background: #FAFAFA;
+  font-family: Helvetica, Arial, sans-serif;
+  color: #0F172A;
+  display: flex;
+  flex-direction: column;
+}
+.header {
+  margin: 22pt 50pt 0 50pt;
+  padding-bottom: 8pt;
+  border-bottom: 4pt solid #DC2626;
+  width: 180pt;
+}
+.header h1 { margin: 0; font-size: 24pt; font-weight: 800; color: #0F172A; }
+.main {
+  display: flex;
+  flex-direction: row;
+  margin: 18pt 50pt 0 50pt;
+  flex: 1;
+  gap: 26pt;
+}
+.diagram {
+  flex: 1.1;
+  display: flex;
+  flex-direction: column;
+  gap: 4pt;
+  position: relative;
+}
+.agent {
+  background: #FFFFFF;
+  border: 2pt solid #0F172A;
+  border-radius: 6pt;
+  padding: 6pt 12pt;
+  text-align: center;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.08);
+}
+.agent p { margin: 0; font-size: 12pt; font-weight: 700; color: #0F172A; }
+.agent .desc { font-size: 8pt; font-weight: 400; color: #64748B; margin-top: 2pt; }
+.agent.solver { border-color: #DC2626; border-width: 3pt; }
+.arrow {
+  text-align: center;
+  font-size: 10pt;
+  color: #64748B;
+  font-weight: 700;
+  line-height: 1;
+}
+.arrow p { margin: 0; }
+.reject {
+  background: #FEF2F2;
+  border: 1.5pt dashed #DC2626;
+  border-radius: 6pt;
+  padding: 4pt 10pt;
+  text-align: center;
+  margin-top: 2pt;
+}
+.reject p { margin: 0; font-size: 9pt; color: #DC2626; font-weight: 700; }
+.specs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.specs ul { margin: 0; padding-left: 18pt; }
+.specs li {
+  font-size: 12pt;
+  line-height: 1.5;
+  color: #1E293B;
+  margin-bottom: 9pt;
+}
+.specs li b { color: #0F172A; font-weight: 700; }
+.specs code {
+  font-family: 'Courier New', monospace;
+  background: #F1F5F9;
+  padding: 1pt 4pt;
+  border-radius: 3pt;
+  font-size: 11pt;
+  color: #DC2626;
+}
+.footer { height: 16pt; }
+</style>
+</head>
+<body>
+<div class="header"><h1>Arquitectura</h1></div>
+<div class="main">
+  <div class="diagram">
+    <div class="agent">
+      <p>Researcher</p>
+      <p class="desc">propone contextos auténticos LatAm</p>
+    </div>
+    <div class="arrow"><p>&darr;</p></div>
+    <div class="agent">
+      <p>Designer</p>
+      <p class="desc">redacta enunciado + ejemplos + spec</p>
+    </div>
+    <div class="arrow"><p>&darr;</p></div>
+    <div class="agent solver">
+      <p>Solver-Validator</p>
+      <p class="desc">resuelve, escribe tests, sandbox ejecuta</p>
+    </div>
+    <div class="reject"><p>&uarr; REJECT con feedback (max 2 iter)</p></div>
+    <div class="arrow"><p>&darr;</p></div>
+    <div class="agent">
+      <p>Reviewer</p>
+      <p class="desc">rúbrica + errores comunes + hints</p>
+    </div>
+  </div>
+  <div class="specs">
+    <ul>
+      <li><b>Mastra workflow</b> con <code>.then().dountil().then()</code></li>
+      <li><b>Schemas Zod</b> entre agentes (type-safe end-to-end)</li>
+      <li><b>OpenRouter</b> + Gemini 2.5 Flash</li>
+      <li><b>Sandbox Python:</b> subprocess + timeout 5s + import allowlist</li>
+    </ul>
+  </div>
+</div>
+<div class="footer"></div>
+</body>
+</html>

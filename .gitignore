@@ -1,0 +1,22 @@
+node_modules
+.next
+.mastra
+dist
+output
+.env
+.env.local
+*.log
+.DS_Store
+.turbo
+
+# Claude Code local state
+.claude/
+.agents/
+memory/
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Supabase local CLI state
+supabase/.branches/
+supabase/.temp/
