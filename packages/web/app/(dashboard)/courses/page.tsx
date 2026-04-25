@@ -1,5 +1,11 @@
 import Link from "next/link";
-import { BookOpenIcon, KeyRoundIcon, MessageSquareIcon } from "lucide-react";
+import {
+  BookOpenIcon,
+  FileTextIcon,
+  KeyRoundIcon,
+  MessageSquareIcon,
+  UploadIcon,
+} from "lucide-react";
 
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { Badge } from "@/components/ui/badge";
@@ -34,6 +40,14 @@ interface ExerciseRow {
   statement_md: string;
 }
 
+interface MaterialRow {
+  id: string;
+  lesson_id: string;
+  title: string;
+  mime: string;
+  file_url: string | null;
+}
+
 const SUBJECT_LABEL: Record<string, string> = {
   cs_python: "CS · Python",
   math_algebra: "Mate · Álgebra",
@@ -50,6 +64,7 @@ async function loadAuthoringSnapshot(): Promise<{
   courses: CourseRow[];
   lessonsByCourse: Map<string, LessonRow[]>;
   exercisesByLesson: Map<string, ExerciseRow[]>;
+  materialsByLesson: Map<string, MaterialRow[]>;
   error: string | null;
 }> {
   if (!isSupabaseConfigured()) {
@@ -57,6 +72,7 @@ async function loadAuthoringSnapshot(): Promise<{
       courses: [],
       lessonsByCourse: new Map(),
       exercisesByLesson: new Map(),
+      materialsByLesson: new Map(),
       error: "Supabase no configurado",
     };
   }
@@ -72,6 +88,7 @@ async function loadAuthoringSnapshot(): Promise<{
     const courseIds = (courses ?? []).map((cr) => cr.id as string);
     const lessonsByCourse = new Map<string, LessonRow[]>();
     const exercisesByLesson = new Map<string, ExerciseRow[]>();
+    const materialsByLesson = new Map<string, MaterialRow[]>();
 
     if (courseIds.length > 0) {
       const { data: lessons, error: lErr } = await c
@@ -89,17 +106,32 @@ async function loadAuthoringSnapshot(): Promise<{
 
       const lessonIds = (lessons ?? []).map((l) => l.id as string);
       if (lessonIds.length > 0) {
-        const { data: exercises, error: eErr } = await c
-          .from("exercises")
-          .select("id, lesson_id, topic, difficulty, verification_kind, statement_md")
-          .in("lesson_id", lessonIds)
-          .order("difficulty", { ascending: true });
+        const [{ data: exercises, error: eErr }, { data: materials, error: mErr }] =
+          await Promise.all([
+            c
+              .from("exercises")
+              .select("id, lesson_id, topic, difficulty, verification_kind, statement_md")
+              .in("lesson_id", lessonIds)
+              .order("difficulty", { ascending: true }),
+            c
+              .from("materials")
+              .select("id, lesson_id, title, mime, file_url")
+              .in("lesson_id", lessonIds)
+              .order("created_at", { ascending: false }),
+          ]);
         if (eErr) throw eErr;
+        if (mErr) throw mErr;
 
         for (const ex of (exercises ?? []) as ExerciseRow[]) {
           const arr = exercisesByLesson.get(ex.lesson_id) ?? [];
           arr.push(ex);
           exercisesByLesson.set(ex.lesson_id, arr);
+        }
+
+        for (const m of (materials ?? []) as MaterialRow[]) {
+          const arr = materialsByLesson.get(m.lesson_id) ?? [];
+          arr.push(m);
+          materialsByLesson.set(m.lesson_id, arr);
         }
       }
     }
@@ -108,6 +140,7 @@ async function loadAuthoringSnapshot(): Promise<{
       courses: (courses ?? []) as CourseRow[],
       lessonsByCourse,
       exercisesByLesson,
+      materialsByLesson,
       error: null,
     };
   } catch (err) {
@@ -115,6 +148,7 @@ async function loadAuthoringSnapshot(): Promise<{
       courses: [],
       lessonsByCourse: new Map(),
       exercisesByLesson: new Map(),
+      materialsByLesson: new Map(),
       error: err instanceof Error ? err.message : String(err),
     };
   }
@@ -126,7 +160,7 @@ function statementExcerpt(md: string): string {
 }
 
 export default async function CoursesPage() {
-  const { courses, lessonsByCourse, exercisesByLesson, error } =
+  const { courses, lessonsByCourse, exercisesByLesson, materialsByLesson, error } =
     await loadAuthoringSnapshot();
 
   const totalLessons = Array.from(lessonsByCourse.values()).reduce(
@@ -151,6 +185,12 @@ export default async function CoursesPage() {
             </Badge>
             <Badge variant="outline">{totalLessons} lecciones</Badge>
             <Badge variant="outline">{totalExercises} ejercicios</Badge>
+            <Button asChild size="sm">
+              <Link href="/courses/upload">
+                <UploadIcon className="size-4" />
+                Subir material
+              </Link>
+            </Button>
             <Button asChild size="sm" variant="secondary">
               <Link href="/chat">
                 <MessageSquareIcon className="size-4" />
@@ -214,6 +254,7 @@ export default async function CoursesPage() {
                   <ul className="divide-y">
                     {lessons.map((lesson) => {
                       const exs = exercisesByLesson.get(lesson.id) ?? [];
+                      const mats = materialsByLesson.get(lesson.id) ?? [];
                       return (
                         <li key={lesson.id} className="px-4 py-3">
                           <div className="flex items-baseline gap-2">
@@ -223,6 +264,7 @@ export default async function CoursesPage() {
                             <h3 className="text-sm font-medium">{lesson.title}</h3>
                             <span className="ml-auto text-xs text-muted-foreground">
                               {exs.length} ejercicio{exs.length === 1 ? "" : "s"}
+                              {mats.length > 0 ? ` · ${mats.length} material${mats.length === 1 ? "" : "es"}` : ""}
                             </span>
                           </div>
                           {exs.length > 0 ? (
@@ -248,6 +290,39 @@ export default async function CoursesPage() {
                                   </div>
                                 </li>
                               ))}
+                            </ul>
+                          ) : null}
+                          {mats.length > 0 ? (
+                            <ul className="mt-2 flex flex-wrap gap-1.5">
+                              {mats.map((m) => {
+                                const inner = (
+                                  <>
+                                    <FileTextIcon className="size-3 text-muted-foreground" />
+                                    <span className="truncate font-medium">{m.title}</span>
+                                    <span className="text-[10px] text-muted-foreground">
+                                      {m.mime}
+                                    </span>
+                                  </>
+                                );
+                                return (
+                                  <li key={m.id} className="max-w-full">
+                                    {m.file_url ? (
+                                      <a
+                                        href={m.file_url}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="flex items-center gap-1.5 rounded-md border bg-background/50 px-2 py-1 text-[11px] hover:bg-muted"
+                                      >
+                                        {inner}
+                                      </a>
+                                    ) : (
+                                      <span className="flex items-center gap-1.5 rounded-md border bg-background/50 px-2 py-1 text-[11px]">
+                                        {inner}
+                                      </span>
+                                    )}
+                                  </li>
+                                );
+                              })}
                             </ul>
                           ) : null}
                         </li>
